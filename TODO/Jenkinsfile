@@ -1,42 +1,44 @@
 pipeline {
     agent any
-
-    tools {
-        nodejs 'Node18'
-    }
-
+ 
     environment {
-        DOCKER_IMAGE = "hannah213/mern-todo-app:latest"
+        DOCKERHUB_CREDENTIALS = 'docker-hub-credentials'
+        DOCKER_IMAGE = 'hannah213/mern-todo-app'
     }
-
+ 
     stages {
-
-        stage('Build Docker Image') {
+docker run -p 5001:5000 --link mongo:mongo todo-app
+        stage('Clone Repository') {
             steps {
-                sh '''
-                cd TODO
-                docker build -t $DOCKER_IMAGE .
-                '''
+                git 'https://github.com/mchayapol/mern-todo-app.git'
             }
         }
-
-        stage('Login to DockerHub') {
+ 
+        stage('Build Docker Image') {
             steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'dockerhub',
-                    usernameVariable: 'USERNAME',
-                    passwordVariable: 'PASSWORD'
-                )]) {
-                    sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
+                script {
+                    docker.build("${DOCKER_IMAGE}:latest")
                 }
             }
         }
-
-        stage('Push Docker Image') {
+ 
+        stage('Login DockerHub') {
             steps {
-                sh 'docker push $DOCKER_IMAGE'
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
+                }
             }
         }
-
+ 
+        stage('Push Docker Image') {
+            steps {
+                sh "docker push ${DOCKER_IMAGE}:latest"
+            }
+        }
+ 
     }
 }
