@@ -7,13 +7,6 @@ pipeline {
     }
  
     stages {
-
-        stage('Clone Repository') {
-            steps {
-                git 'https://github.com/Hsuy33mon/testing.git'
-            }
-        }
- 
         stage('Build Docker Image') {
             steps {
                 dir('TODO') {
