@@ -17,4 +17,4 @@ ENV MONGODB_URI=mongodb://mongo:27017/todo
 
 EXPOSE 5000
 
-CMD ["npm","start"]
+CMD ["npm", "start"]

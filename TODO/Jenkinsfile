@@ -1,24 +1,22 @@
 pipeline {
     agent any
+
     tools {
         nodejs 'Node18'
     }
 
     environment {
-        DOCKER_IMAGE = "hannah213/mern-todo-app"
+        DOCKER_IMAGE = "hannah213/mern-todo-app:latest"
     }
 
     stages {
 
-        // stage('Clone Repository') {
-        //     steps {
-        //         git 'https://github.com/YOUR_USERNAME/mern-todo-app.git'
-        //     }
-        // }
-
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $DOCKER_IMAGE .'
+                sh '''
+                cd TODO
+                docker build -t $DOCKER_IMAGE .
+                '''
             }
         }
 
