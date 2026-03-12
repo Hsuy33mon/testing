@@ -10,7 +10,7 @@ pipeline {
 
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/mchayapol/mern-todo-app.git'
+                git 'https://github.com/Hsuy33mon/testing.git'
             }
         }
  
