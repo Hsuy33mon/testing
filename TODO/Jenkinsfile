@@ -7,7 +7,12 @@ pipeline {
     }
  
     stages {
-docker run -p 5001:5000 --link mongo:mongo todo-app
+        stage('Run Container') {
+    steps {
+        sh "docker run -p 5001:5000 --link mongo:mongo ${DOCKER_IMAGE}:latest"
+    }
+}
+// docker run -p 5001:5000 --link mongo:mongo todo-app
         stage('Clone Repository') {
             steps {
                 git 'https://github.com/mchayapol/mern-todo-app.git'
